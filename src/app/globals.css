@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -32,4 +33,16 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+@font-face {
+  font-family: 'Mochiy Pop P One';
+  src: url('ttps://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap') format('truetype');
+  font-display: swap;
+}
+
+
+#homer{
+  font-family: 'Mochiy Pop P One', sans-serif;
+  font-display: swap;
 }
