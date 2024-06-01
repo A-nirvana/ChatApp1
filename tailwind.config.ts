@@ -14,6 +14,11 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    theme: {
+      fontFamily: {
+        mochi: ['Mochiy Pop One', 'sans-serif'],
+      },
+    },
   },
   plugins: [],
 };

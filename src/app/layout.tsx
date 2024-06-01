@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Hunter Chat Global",
-  description: "A chat application for hunters",
+  title: "Convoke",
+  description: "A chat application",
 };
 
 export default function RootLayout({
