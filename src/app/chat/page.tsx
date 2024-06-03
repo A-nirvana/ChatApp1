@@ -5,6 +5,14 @@ import "./chat.css"
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { motion } from 'framer-motion';
 
+import { Source_Code_Pro } from 'next/font/google';
+
+const inter = Source_Code_Pro({
+  weight : "600",
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 function App() {
   // const [socket, setSocket] = useState<WebSocket | null>(null);
 
@@ -30,15 +38,17 @@ function App() {
 
   return (
     <main className='min-h-screen w-screen flex'>
-      <section className=' bg-slate-900 dark: bg-slate-900 w-1/4'>
-        <div className=' h-14 shadow-md shadow-slate-950 -mb-1 mb-4 pr-1 text-center text-xl font-semibold font-mono pt-3 flex justify-center'>
-          <img src='../favicon.ico' className='h-6'
-          />HuntersOfficial</div>
-        <div>{Contacts(setCurrent)}</div>
+      <section className=' bg-slate-900 dark:bg-slate-900 w-1/4'>
+        <div className=' h-14 pr-1 text-center text-xl font-semibold font-mono pt-3 flex justify-center'>
+          <img src='/Untitledlogo.svg' className='h-10 invert -mt-1 dark:drop-shadow-[0_0_0.3rem_#ff0000]'/>
+        </div>
+        <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4'/>
+        <div className='mt-2'>{Contacts(setCurrent)}</div>
         
       </section>
-      <section className='bg-white dark:bg-slate-800 w-3/4 text-slate-950 dark:text-white max-h-screen'>
-        <div className=' h-14 shadow-md shadow-slate-950 mb-4 text-center'><p className=' font-semibold font-sans'>{current.name}</p><p className=' text-sm text-gray-500'>{current.about}</p></div>
+      <section className='w-3/4 text-slate-950 dark:text-white max-h-screen'>
+        <div className='bg-white dark:bg-blue-950  h-14 shadow-md shadow-slate-950 text-center'><p className={`font-semibold font-sans ${inter.className}`}>{current.name}</p><p className=' text-sm text-gray-500'>{current.about}</p></div>
+        <hr className=' bg-cyan-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0.1rem_0.5rem_#00ffff80] border-cyan-700 w-11/12 ml-12'/>
         {current.name &&
         <div className=' w-full overflow-scroll h-5/6'>
           {current.chats.map((chat)=>{
@@ -76,7 +86,7 @@ function App() {
               }
             }}
           ><img src="/send.svg" className='h-6 mr-0.5'/></motion.div>
-                <motion.div
+          <motion.div
             className='box p-2 bg-slate-600 rounded-full mx-2 cursor-pointer h-10'
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
