@@ -43,7 +43,7 @@ export default function Contacts(set: Function) {
     ];
 
     return (
-        <main className="flex h-auto flex-col items-center justify-between space-y-3">
+        <main className="flex h-auto flex-col items-center justify-between space-y-3 ">
             {arr.map((item) => {
                 return (
                     <motion.div
