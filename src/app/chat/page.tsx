@@ -91,10 +91,6 @@ function App() {
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            // onClick={()=>{
-            //   current.chats.push({ sender: "Jane Smith", message: "Likewise" },);
-            //   setCurrent({name : current.name, about : current.about, chats : current.chats, imgLink: "" })
-            // }}
             onClick={() => {
               navigator.mediaDevices.getUserMedia({ audio: true })
                 .then((stream) => {
@@ -109,7 +105,6 @@ function App() {
                     const audioBlob = new Blob(chunks, { type: "audio/webm" });
                     const audioUrl = URL.createObjectURL(audioBlob);
 
-                    // Do something with the recorded audio
                     console.log("Recorded audio URL:", audioUrl);
                   });
                 })
@@ -119,6 +114,14 @@ function App() {
             }}
           >
             <img src="/record.svg" className='h-6'/>
+          </motion.div>
+
+          <motion.div
+            className='box p-2 bg-slate-600 rounded-full mx-2 cursor-pointer h-10'
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}>
+              <img src="/send.svg" className='h-6 mr-0.5'/>
           </motion.div>
         </div>
         
