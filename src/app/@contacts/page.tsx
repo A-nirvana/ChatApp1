@@ -1,16 +1,11 @@
 "use client"
 
+import { Chat } from ".";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Contacts(set: Function) {
-    interface Chat {
-        name: string;
-        about: string;
-        chats: { sender: string; message: string }[];
-        imagrLink : string
-    }
-    const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imagrLink : "" });
+    const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink : "" });
     const arr: Chat[] = [
         {
             name: "John Doe",
@@ -19,7 +14,7 @@ export default function Contacts(set: Function) {
                 { sender: "John Doe", message: "Hello" },
                 { sender: "You", message: "How are you?" },
                 { sender: "John Doe", message: "Nice to meet you" },
-            ],imagrLink : ""
+            ],imgLink : ""
         },
         {
             name: "Jane Smith",
@@ -28,7 +23,7 @@ export default function Contacts(set: Function) {
                 { sender: "Jane Smith", message: "Hi" },
                 { sender: "You", message: "I'm good, thanks!" },
                 { sender: "Jane Smith", message: "Likewise" },
-            ],imagrLink : ""
+            ],imgLink : ""
         },
         {
             name: "Michael Johnson",
@@ -37,7 +32,7 @@ export default function Contacts(set: Function) {
                 { sender: "Michael Johnson", message: "Hey" },
                 { sender: "You", message: "Doing great!" },
                 { sender: "Michael Johnson", message: "What about you?" },
-            ],imagrLink : ""
+            ],imgLink : ""
         },
         // Add more chat objects with the 'chats' array
     ];
@@ -56,7 +51,6 @@ export default function Contacts(set: Function) {
                         onClick={() => {
                             setCurrent(item);
                             set(item);
-                            console.log(current);
                         }}
                     >
                         <p className="text-md text-black dark:text-white">{item.name}</p>
