@@ -2,8 +2,11 @@
 
 import { Shantell_Sans } from "next/font/google";
 import { useEffect } from "react";
-import {motion} from "framer-motion"
+import { getCookie } from "./cookie";
 import Footer from "./@contacts/Footer";
+import { Signup } from "./@auth/signup";
+import dotenv from 'dotenv';
+import path from 'path';
 
 const inter = Shantell_Sans({
   weight : "700",
@@ -13,7 +16,9 @@ const inter = Shantell_Sans({
 
 export default function Home() {
   useEffect(()=>{
+    dotenv.config({path : path.resolve(__dirname, './.env')});
 
+    console.log(process.env)
   },[])
 
   return (
@@ -29,10 +34,22 @@ export default function Home() {
         <ul className="flex space-x-12 mt-2">
           <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Home</li>
           <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Features</li>
-          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Pricing</li>
+          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Premium</li>
           <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Contact</li>
         </ul>
-        <button className="bg-cyan-800 font-semibold select-none px-4 py-2 rounded-3xl mt-2 hover:bg-slate-600">Get Started</button>
+        <button className="bg-cyan-800 font-semibold select-none px-4 py-2 rounded-3xl mt-2 hover:bg-slate-600"
+          onClick={()=>{
+            if(getCookie("UserCredential")){
+              window.location.href= "/chat";
+              return;
+            }
+            return(
+              <>
+                <Signup></Signup>
+              </>
+            )
+          }}
+        >Get Started</button>
       </div>
       <div className=" mt-28 flex justify-center">
         <div className=" relative w-1/4 ml-20 scale-125 mt-20">

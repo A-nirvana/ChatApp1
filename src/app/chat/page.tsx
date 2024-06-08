@@ -20,17 +20,17 @@ function App() {
   const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink: "" });
   const [chat, setChat] = useState("")
 
-  // useEffect(() => {
-  //   // const newSocket = new WebSocket('ws://localhost:8080');
-  //   // newSocket.onopen = () => {
-  //   //   console.log('Connection established');
-  //   // }
-  //   // newSocket.onmessage = (message) => {
-  //   //   console.log('Message received:', message.data);
-  //   // }
-  //   // setSocket(newSocket);
-  //   // return () => newSocket.close();
-  // }, [])
+  useEffect(() => {
+    // const newSocket = new WebSocket('ws://localhost:8080');
+    // newSocket.onopen = () => {
+    //   console.log('Connection established');
+    // }
+    // newSocket.onmessage = (message) => {
+    //   console.log('Message received:', message.data);
+    // }
+    // setSocket(newSocket);
+    // return () => newSocket.close();
+  }, [])
 
   return (
     <main className='min-h-screen w-screen flex'>
