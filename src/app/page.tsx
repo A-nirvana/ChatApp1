@@ -1,12 +1,10 @@
 "use client"
 
 import { Shantell_Sans } from "next/font/google";
-import { useEffect } from "react";
-import { getCookie } from "./cookie";
+import { use, useEffect, useState } from "react";
+import { getCookie } from "@/lib/cookie";
 import Footer from "./@contacts/Footer";
 import { Signup } from "./@auth/signup";
-import dotenv from 'dotenv';
-import path from 'path';
 
 const inter = Shantell_Sans({
   weight : "700",
@@ -15,12 +13,10 @@ const inter = Shantell_Sans({
 })
 
 export default function Home() {
-  useEffect(()=>{
-    dotenv.config({path : path.resolve(__dirname, './.env')});
-
-    console.log(process.env)
-  },[])
-
+  // useEffect(()=>{
+ 
+  // },[])
+  const [showSignup, setShowSignup] = useState(false);
   return (
     <main className="relative flex flex-col min-h-screen pt-6">
 
@@ -39,19 +35,16 @@ export default function Home() {
         </ul>
         <button className="bg-cyan-800 font-semibold select-none px-4 py-2 rounded-3xl mt-2 hover:bg-slate-600"
           onClick={()=>{
-            if(getCookie("UserCredential")){
+            if(getCookie("Authentication")){
               window.location.href= "/chat";
               return;
             }
-            return(
-              <>
-                <Signup></Signup>
-              </>
-            )
+            setShowSignup(true);
           }}
         >Get Started</button>
       </div>
       <div className=" mt-28 flex justify-center">
+        {showSignup && <Signup/>}
         <div className=" relative w-1/4 ml-20 scale-125 mt-20">
         <p className={` text-5xl ${inter.className} tracking-tighter`}>Your hangout for laughs , games & friends</p>
         <p className=" font-extralight text-3xl mt-2 font-sans tracking-wider">Power up your downtime: Convoke for cozy chats, classic games, and friend time.</p>
