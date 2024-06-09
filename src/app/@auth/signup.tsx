@@ -1,42 +1,29 @@
-
-import { createUserWithEmailAndPassword, signInWithRedirect } from "firebase/auth";
-import { FireAuth } from "../firebase";
-import { GoogleAuthProvider } from "firebase/auth";
-import {setCookie} from "../cookie"
-
-import { useAuthState } from 'react-firebase-hooks/auth'
 import { useState } from "react";
+import { createUser, signInWithGoogle } from "@/lib/firebase/auth";
+import { useUser } from "@/lib/getUser";
 
 export function Signup() {
-    const provider = new GoogleAuthProvider();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     return (
         <>
-            <div className=" bg-[#464fb6d8]">
-                <input value={email} onChange={(e)=>{setEmail(e.target.value)}} />
-                <input value={password} onChange={(e)=>{setPassword(e.target.value)}} />
-                <input />
+            <div className=" bg-[#464fb6d8] absolute flex flex-col space-y-3 p-8 z-10 rounded-3xl">
+                <input className="p-2 rounded-3xl text-black" value={email} onChange={(e)=>{setEmail(e.target.value)}} />
+                <input className="p-2 rounded-3xl text-black" value={password} onChange={(e)=>{setPassword(e.target.value)}} />
+                <input className="p-2 rounded-3xl text-black" />
                 <p>Or signup with</p>
-                <button
-                    onClick={async ()=>{
-                        provider.addScope('profile')
-                        provider.addScope('email')
-                        await signInWithRedirect(FireAuth,provider)
+                <button className="p-3 rounded-3xl -mb-4 bg-[#ea4335]"
+                    onClick={(e)=>{
+                        e.preventDefault();
+                        signInWithGoogle()
+                        window.location.href = "/chat";
                     }}
                 >Signup with Google</button>
-                <button>Signup with Facebook</button>
-                <button
-                    onClick={() => {
-                        createUserWithEmailAndPassword(FireAuth, email, password)
-                            .then((userCredential) => {
-                                const user = userCredential.user;
-                                setCookie('UserCredential',"UserId "+user.uid,30);
-                            })
-                            .catch((error) => {
-                                const errorCode = error.code;
-                                const errorMessage = error.message;
-                            });
+                <button className=" bg-[#1f4577] p-3 rounded-3xl">Signup with Facebook</button>
+                <button className=" bg-[#1da1f2] p-3 rounded-3xl"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        createUser(email,password);
                     }}
                 >Signup</button>
             </div>
