@@ -4,7 +4,6 @@ import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 import { auth } from "./firebase/clientApp";
-import { useRouter } from "next/navigation";
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -22,4 +21,8 @@ export function useUser() {
   }, []);
 
   return user;
+}
+
+export function currentUser(){
+    return auth.currentUser;
 }

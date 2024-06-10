@@ -7,6 +7,11 @@ import { Chat } from '../@contacts';
 
 import { Source_Code_Pro } from 'next/font/google';
 import Input from './Input';
+import { currentUser } from '@/lib/getUser';
+import { User } from 'firebase/auth';
+import { signOut } from '@/lib/firebase/auth';
+import { useRouter } from 'next/navigation';
+import { setCookie } from '@/lib/cookie';
 
 const inter = Source_Code_Pro({
   weight: "600",
@@ -15,23 +20,14 @@ const inter = Source_Code_Pro({
 })
 
 function App() {
-
   // const [socket, setSocket] = useState<WebSocket | null>(null);
   const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink: "" });
   const [chat, setChat] = useState("")
-
+  const [user, setUser] = useState<User | null>()
+  const router = useRouter();
   useEffect(() => {
-    // const newSocket = new WebSocket('ws://localhost:8080');
-    // newSocket.onopen = () => {
-    //   console.log('Connection established');
-    // }
-    // newSocket.onmessage = (message) => {
-    //   console.log('Message received:', message.data);
-    // }
-    // setSocket(newSocket);
-    // return () => newSocket.close();
-  }, [])
-
+    setUser(currentUser());
+  }, [user])
   return (
     <main className='min-h-screen w-screen flex'>
       <section className=' bg-slate-900 dark:bg-slate-900 w-1/4'>
@@ -40,20 +36,29 @@ function App() {
         </div>
         <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4' />
         <div className='mt-2'>{Contacts(setCurrent)}</div>
-
+        <div className=' absolute bottom-0 py-2 flex w-1/4 bg-slate-600 items-center'>
+          <img src={user?.photoURL || undefined} className=' rounded-full h-9 mr-5 ml-5' />
+          <div>
+            <p className='mt-1 text-sm'>{user ? user.displayName : "user"}</p>
+            <p className=' text-xs'>Online</p>
+          </div>
+          <button onClick={()=>{
+            router.push("/settings")
+          }} className='absolute right-6 hover:bg-slate-800 p-1 rounded-lg'><img src='/settings.svg' className='h-6 invert hover:rotate-[360deg] hover:transition-all hover:duration-300' /></button>
+        </div>
       </section>
       <section className='w-3/4 text-slate-950 dark:text-white max-h-screen'>
         {current.name && <motion.div
-            className='box p-2 bg-[#4a4ad1ab] rounded-full mx-2 cursor-pointer h-11 w-11 absolute right-40 top-2'
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-              onClick={()=>{
-                window.location.href='./chatroom'
-              }}
-            >
-              <img src="/video.svg" className='h-8 -mt-0.5'/>
-          </motion.div>}
+          className='box p-2 bg-[#4a4ad1ab] rounded-full mx-2 cursor-pointer h-11 w-11 absolute right-40 top-2'
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          onClick={() => {
+            router.push('/chatroom')
+          }}
+        >
+          <img src="/video.svg" className='h-8 -mt-0.5' />
+        </motion.div>}
         <div className='bg-white dark:bg-blue-950  h-14 shadow-md shadow-slate-950 text-center'>
           <p className={`font-semibold font-sans ${inter.className}`}>{current.name}</p>
           <p className=' text-sm text-gray-500'>{current.about}</p>
@@ -76,7 +81,7 @@ function App() {
             })
             }
             <div className=' absolute bottom-3 justify-center flex w-3/4'>
-              {Input(chat,setChat,current,setCurrent)}
+              {Input(chat, setChat, current, setCurrent)}
             </div>
 
           </div>
@@ -85,6 +90,7 @@ function App() {
 
     </main>
   )
+
 }
 
 export default App

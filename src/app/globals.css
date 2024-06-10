@@ -35,14 +35,7 @@ body {
   }
 }
 
-@font-face {
-  font-family: 'Mochiy Pop P One';
-  src: url('ttps://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap') format('truetype');
-  font-display: swap;
-}
 
-
-#homer{
-  font-family: 'Mochiy Pop P One', sans-serif;
-  font-display: swap;
+.signup-input {
+  @apply p-2 px-5 rounded-3xl text-black outline-none;
 }
