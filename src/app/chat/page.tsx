@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Contacts from '../@contacts/page'
 import "./chat.css"
 import { motion } from 'framer-motion';
@@ -7,6 +7,9 @@ import { Chat } from '../@contacts';
 
 import { Source_Code_Pro } from 'next/font/google';
 import Input from './Input';
+import { User } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { currentUser } from '@/lib/getUser';
 
 const inter = Source_Code_Pro({
   weight: "600",
@@ -19,19 +22,28 @@ function App() {
   // const [socket, setSocket] = useState<WebSocket | null>(null);
   const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink: "" });
   const [chat, setChat] = useState("")
+  const endRef = useRef(null)
+  const [user, setUser] = useState<User | null>()
+  const router = useRouter();
 
   useEffect(() => {
-    // const newSocket = new WebSocket('ws://localhost:8080');
-    // newSocket.onopen = () => {
-    //   console.log('Connection established');
-    // }
-    // newSocket.onmessage = (message) => {
-    //   console.log('Message received:', message.data);
-    // }
-    // setSocket(newSocket);
-    // return () => newSocket.close();
+    const fetchUser = async () => {
+      const current = await currentUser();
+      setUser(current);
+      console.log(current)
+    };
+    fetchUser();
   }, [])
 
+  const contacts = Contacts(setCurrent);
+
+  // if(!user){
+  //   return (
+  //     <p>
+  //     Loading
+  //     </p>
+  //   )
+  // }
   return (
     <main className='min-h-screen w-screen flex'>
       <section className=' bg-slate-900 dark:bg-slate-900 w-1/4'>
@@ -39,8 +51,17 @@ function App() {
           <img src='/Untitledlogo.svg' className='h-10 invert -mt-1 dark:drop-shadow-[0_0_0.3rem_#ff0000]' />
         </div>
         <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4' />
-        <div className='mt-2'>{Contacts(setCurrent)}</div>
-
+        <div className='mt-2'>{contacts}</div>
+        <div className=' absolute bottom-0 py-2 flex w-1/4 bg-slate-600 items-center'>
+          <img src={user?.photoURL || undefined} className=' rounded-full h-9 mr-5 ml-5' />
+          <div className=' hover:opacity-10'>
+            <p className='mt-1 text-sm'>{user ? user.displayName : "user"}</p>
+            <p className=' text-xs'>Online</p>
+          </div>
+          <button onClick={()=>{
+            router.push("/settings")
+          }} className='absolute right-6 hover:bg-slate-800 p-1 rounded-lg'><img src='/settings.svg' className='h-6 invert hover:rotate-[360deg] hover:transition-all hover:duration-300' /></button>
+        </div>
       </section>
       <section className='w-3/4 text-slate-950 dark:text-white max-h-screen'>
         {current.name && <motion.div
@@ -49,7 +70,7 @@ function App() {
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
               onClick={()=>{
-                window.location.href='./chatroom'
+                router.push("/chatroom");
               }}
             >
               <img src="/video.svg" className='h-8 -mt-0.5'/>
@@ -75,6 +96,7 @@ function App() {
               )
             })
             }
+            <div ref={endRef}></div>
             <div className=' absolute bottom-3 justify-center flex w-3/4'>
               {Input(chat,setChat,current,setCurrent)}
             </div>
