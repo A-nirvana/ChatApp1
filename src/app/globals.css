@@ -1,9 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -14,8 +14,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 6, 20, 100;
+    --background-end-rgb: 12, 40, 200;
+    --background-start-rgb: 3, 10, 70;
   }
 }
 
@@ -36,5 +36,8 @@ body {
 }
 
 .signup-input {
-  @apply p-2 px-5 rounded-3xl text-black outline-none;
+  @apply p-2 px-5 rounded-xl outline-none bg-[#1d1d1d] w-96;
+}
+.date {
+  @apply p-2 px-5 rounded outline-none bg-[#1d1d1d] w-[7.5rem];
 }

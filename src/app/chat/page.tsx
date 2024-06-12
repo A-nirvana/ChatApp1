@@ -9,7 +9,7 @@ import { Source_Code_Pro } from 'next/font/google';
 import Input from './Input';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { currentUser } from '@/lib/getUser';
+import { useUser } from '../UserProvider';
 
 const inter = Source_Code_Pro({
   weight: "600",
@@ -18,32 +18,26 @@ const inter = Source_Code_Pro({
 })
 
 function App() {
-
   // const [socket, setSocket] = useState<WebSocket | null>(null);
   const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink: "" });
-  const [chat, setChat] = useState("")
+  const [chat, setChat] = useState(">")
   const endRef = useRef(null)
   const [user, setUser] = useState<User | null>()
   const router = useRouter();
-
+  const currUser = useUser()
   useEffect(() => {
-    const fetchUser = async () => {
-      const current = await currentUser();
-      setUser(current);
-      console.log(current)
-    };
-    fetchUser();
-  }, [])
+    setUser(currUser);
+  }, [currUser])
 
   const contacts = Contacts(setCurrent);
 
-  // if(!user){
-  //   return (
-  //     <p>
-  //     Loading
-  //     </p>
-  //   )
-  // }
+  if(!user){
+    return (
+      <p>
+      Loading
+      </p>
+    )
+  }
   return (
     <main className='min-h-screen w-screen flex'>
       <section className=' bg-slate-900 dark:bg-slate-900 w-1/4'>
@@ -81,7 +75,7 @@ function App() {
         </div>
         <hr className=' bg-cyan-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0.1rem_0.5rem_#00ffff80] border-cyan-700 w-11/12 ml-12' />
         {current.name &&
-          <div className=' w-full overflow-scroll h-5/6'>
+          <div className=' w-full overflow-scroll h-5/6 scr'>
             {current.chats.map((chat) => {
               const para = chat.message.split("\n")
               return (
@@ -97,7 +91,7 @@ function App() {
             })
             }
             <div ref={endRef}></div>
-            <div className=' absolute bottom-3 justify-center flex w-3/4'>
+            <div className=' absolute bottom-0 justify-center flex w-3/4 bg-gray-600'>
               {Input(chat,setChat,current,setCurrent)}
             </div>
 
