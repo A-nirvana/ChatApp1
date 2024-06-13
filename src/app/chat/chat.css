@@ -6,3 +6,8 @@ textarea:focus{
 textarea{
     resize: none;
 }
+
+.scr{
+    scrollbar-width: none;
+    scrollbar-color: transparent;
+}

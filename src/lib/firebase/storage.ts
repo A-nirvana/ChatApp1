@@ -2,29 +2,40 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 import { storage } from "./clientApp";
 
-// import { updateRestaurantImageReference } from "@/src/lib/firebase/firestore";
+const upload = async (file: File) => {
+    const metadata = {
+        contentType: 'image/jpeg'
+    };
+    const time = Date.now()-Date.UTC(2020,1,1);
+    const storageRef = ref(storage, 'images/'+ time + file.name );
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
 
-// export async function updateRestaurantImage(restaurantId, image) {
-// 	try {
-// 		if (!restaurantId)
-// 			throw new Error("No restaurant ID has been provided.");
+    return new Promise((resolve, reject)=> {
+    uploadTask.on('state_changed',
+        (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+                case 'paused':
+                    console.log('Upload is paused');
+                    break;
+                case 'running':
+                    console.log('Upload is running');
+                    break;
+            }
+        },
+        (error) => {
+            reject(error.code)
+        },
+        () => {
+            // Upload completed successfully, now we can get the download URL
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                resolve(downloadURL);
+            });
+        }
+    );
+})
 
-// 		if (!image || !image.name)
-// 			throw new Error("A valid image has not been provided.");
+}
 
-// 		const publicImageUrl = await uploadImage(restaurantId, image);
-// 		await updateRestaurantImageReference(restaurantId, publicImageUrl);
-
-// 		return publicImageUrl;
-// 	} catch (error) {
-// 		console.error("Error processing request:", error);
-// 	}
-// }
-
-// async function uploadImage(restaurantId, image) {
-// 	const filePath = `images/${restaurantId}/${image.name}`;
-// 	const newImageRef = ref(storage, filePath);
-// 	await uploadBytesResumable(newImageRef, image);
-
-// 	return await getDownloadURL(newImageRef);
-// }
+export default upload;

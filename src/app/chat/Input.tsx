@@ -7,14 +7,17 @@ import { motion } from 'framer-motion';
 export default function Input(chat : string,setChat : Function ,current : Chat,setCurrent:Function){
     return(
         <>
-        <ReactTextareaAutosize maxRows={6} className=' w-1/2 bg-slate-700 bg-opacity-70 rounded-md py-2 px-6 shadow-xl mx-4'
+        <input type='file' id='upload-file' hidden></input>
+        <label htmlFor="upload-file"><img src='/add.svg' className='h-12 mt-1 cursor-pointer'/></label>
+        <ReactTextareaAutosize maxRows={6} className=' w-2/3 bg-transparent bg-opacity-70 py-4 px-6 border-x-2 mx-4 border-gray-800'
             value={chat}
             onChange={(area)=>{
               setChat(area.target.value)
             }}
+            placeholder='Type Something'
           />
           <motion.div
-            className='box p-2 bg-slate-600 rounded-full ml-4 mr-2 cursor-pointer h-10 '
+            className='box p-2 mt-2 rounded-full ml-4 mr-2 cursor-pointer h-10 '
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -28,7 +31,7 @@ export default function Input(chat : string,setChat : Function ,current : Chat,s
             }}
           ><img src="/send.svg" className='h-6 mr-0.5'/></motion.div>
           <motion.div
-            className='box p-2 bg-slate-600 rounded-full mx-2 cursor-pointer h-10'
+            className='box p-2 mt-2 rounded-full mx-2 cursor-pointer h-10'
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}

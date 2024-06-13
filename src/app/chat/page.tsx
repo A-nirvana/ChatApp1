@@ -9,7 +9,8 @@ import { Source_Code_Pro } from 'next/font/google';
 import Input from './Input';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
-import { currentUser } from '@/lib/getUser';
+import { useUser } from '../UserProvider';
+import { url } from 'inspector';
 
 const inter = Source_Code_Pro({
   weight: "600",
@@ -18,32 +19,36 @@ const inter = Source_Code_Pro({
 })
 
 function App() {
-
   // const [socket, setSocket] = useState<WebSocket | null>(null);
   const [current, setCurrent] = useState<Chat>({ name: "", about: "", chats: [], imgLink: "" });
   const [chat, setChat] = useState("")
   const endRef = useRef(null)
   const [user, setUser] = useState<User | null>()
+  const [avatar, setAvatar] = useState({
+    file : null,
+    url : ""
+  })
   const router = useRouter();
-
+  const currUser = useUser()
   useEffect(() => {
-    const fetchUser = async () => {
-      const current = await currentUser();
-      setUser(current);
-      console.log(current)
-    };
-    fetchUser();
-  }, [])
+    setUser(currUser);
+    if(user?.photoURL){
+      setAvatar({
+        file : null,
+        url : user.photoURL
+      })
+    }
+  }, [currUser])
 
   const contacts = Contacts(setCurrent);
 
-  // if(!user){
-  //   return (
-  //     <p>
-  //     Loading
-  //     </p>
-  //   )
-  // }
+  if(!user){
+    return (
+      <p>
+      Loading
+      </p>
+    )
+  }
   return (
     <main className='min-h-screen w-screen flex'>
       <section className=' bg-slate-900 dark:bg-slate-900 w-1/4'>
@@ -53,7 +58,7 @@ function App() {
         <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4' />
         <div className='mt-2'>{contacts}</div>
         <div className=' absolute bottom-0 py-2 flex w-1/4 bg-slate-600 items-center'>
-          <img src={user?.photoURL || undefined} className=' rounded-full h-9 mr-5 ml-5' />
+          <img src={user?.photoURL || "/logo.svg"} className={`rounded-full mr-5 ml-5 bg-yellow-100 ${user.photoURL?'h-9':'h-7 p-0.5'}`} />
           <div className=' hover:opacity-10'>
             <p className='mt-1 text-sm'>{user ? user.displayName : "user"}</p>
             <p className=' text-xs'>Online</p>
@@ -81,7 +86,7 @@ function App() {
         </div>
         <hr className=' bg-cyan-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0.1rem_0.5rem_#00ffff80] border-cyan-700 w-11/12 ml-12' />
         {current.name &&
-          <div className=' w-full overflow-scroll h-5/6'>
+          <div className=' w-full overflow-scroll h-5/6 scr'>
             {current.chats.map((chat) => {
               const para = chat.message.split("\n")
               return (
@@ -97,7 +102,7 @@ function App() {
             })
             }
             <div ref={endRef}></div>
-            <div className=' absolute bottom-3 justify-center flex w-3/4'>
+            <div className=' absolute bottom-0 justify-center flex w-3/4 bg-gray-600'>
               {Input(chat,setChat,current,setCurrent)}
             </div>
 
