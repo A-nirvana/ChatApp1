@@ -7,12 +7,14 @@ import { motion } from 'framer-motion';
 export default function Input(chat : string,setChat : Function ,current : Chat,setCurrent:Function){
     return(
         <>
-        <input type='file'></input>
+        <input type='file' id='upload-file' hidden></input>
+        <label htmlFor="upload-file"><img src='/add.svg' className='h-12 mt-1 cursor-pointer'/></label>
         <ReactTextareaAutosize maxRows={6} className=' w-2/3 bg-transparent bg-opacity-70 py-4 px-6 border-x-2 mx-4 border-gray-800'
             value={chat}
             onChange={(area)=>{
               setChat(area.target.value)
             }}
+            placeholder='Type Something'
           />
           <motion.div
             className='box p-2 mt-2 rounded-full ml-4 mr-2 cursor-pointer h-10 '

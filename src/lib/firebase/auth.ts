@@ -10,8 +10,10 @@ import {
   updateProfile
 } from "firebase/auth";
 
+import { db } from "./clientApp";
+
 import { auth } from "./clientApp";
-import { setCookie } from "../cookie";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export function onAuthStateChanged(cb: NextOrObserver<User>): () => void {
   return _onAuthStateChanged(auth, cb);
@@ -24,51 +26,94 @@ export async function createUser(email : string, password : string, userName : s
         updateProfile(auth.currentUser, {
             displayName : userName
         });
+        await setDoc(doc(db, "users", userCred.user.uid), {
+          username : userName,
+          email,
+          id: userCred.user.uid,
+          blocked: []
+        });
+
+        await setDoc(doc(db, "userChats", userCred.user.uid), {
+          chats: [],
+        });
+
         return userCred.user;
     } else {
         throw new Error("Current user is null");
     }
   }
-  catch(error){
+  catch(error : any){
       console.log("Error creating new user", error);
-      return null;
+      return error;
   }
 }
 
 export async function signUser(email : string, password : string){
   try{
       const userCred = await signInWithEmailAndPassword(auth,email, password);
-      return userCred;
+      return userCred.user;
   }
   catch(error){
       console.log("Error Signing in", error)
+      return error
   }
 }
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-
+  let user : any;
   try {
     await signInWithPopup(auth, provider)
     .then((userCred)=>{
-      return userCred.user;
+      user = userCred.user;
     });
-  } catch (error) {
+
+    const userDoc = await getDoc(doc(db,"users",user.uid));
+    if(!userDoc.exists()){
+      await setDoc(doc(db, "users", user.uid), {
+        username : user.displayName,
+        email : user.email,
+        id: user.uid,
+        blocked: []
+      });
+
+      await setDoc(doc(db, "userChats",user.uid), {
+        chats: [],
+      });
+    }
+  } catch (error : any) {
     console.error("Error signing in with Google", error);
+    return error
   }
+  return user;
 }
 
 export async function signInWithFacebook() {
   const provider = new FacebookAuthProvider();
-
+  let user : any;
   try {
     await signInWithPopup(auth, provider)
     .then((userCred)=>{
       return userCred.user;
     });
-  } catch (error) {
+    const userDoc = await getDoc(doc(db,"users",user.uid));
+    if(!userDoc.exists()){
+      await setDoc(doc(db, "users", user.uid), {
+        username : user.displayName,
+        email : user.email,
+        id: user.uid,
+        blocked: []
+      });
+
+      await setDoc(doc(db, "userChats",user.uid), {
+        chats: [],
+      });
+    }
+  } catch (error:any) {
     console.error("Error signing in with Google", error);
+    return error;
   }
+  return user;
 }
 
 export async function signOut() {

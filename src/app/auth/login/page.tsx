@@ -1,33 +1,67 @@
 "use client"
 
+import { Bounce, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 import { signInWithFacebook, signInWithGoogle, signUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/UserProvider";
+
+
 
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
     const user = useUser();
-     if(user){
+    if (user) {
         router.push("/chat")
-     }
+    }
     return (
         <main className="h-screen w-screen flex justify-center items-center">
             <div className=" bg-[#3d3d3d] absolute flex flex-col p-8 z-10 rounded drop-shadow-[-2rem_3rem_3rem_#00000090] text-center">
                 <p className="text-xl font-semibold mb-6">Welcome Back !</p>
                 <label className=" text-left text-sm ml-3 mt-6">Email</label>
-                <input className="signup-input" value={email} onChange={(e) => { setEmail(e.target.value) }} required/>
+                <input className="signup-input" value={email} onChange={(e) => { setEmail(e.target.value) }} required />
                 <label className=" text-left text-sm ml-3 mt-6">Password</label>
-                <input className="signup-input" value={password} onChange={(e) => { setPassword(e.target.value) }} required/>
+                <input className="signup-input" value={password} onChange={(e) => { setPassword(e.target.value) }} required />
                 <p>Or Continue with</p>
                 <div className="flex justify-center space-x-10 mt-2 mb-6">
                     <button className="p-1 rounded-full border-2 hover:bg-[#22222270]"
                         onClick={(e) => {
                             e.preventDefault();
-                            signInWithGoogle()
-                            router.push("/chat");
+                            signInWithGoogle().then(user => {
+                                if (user.uid) {
+                                    toast.success('Logged in SuccessFully', {
+                                        position: "top-right",
+                                        autoClose: 2000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "dark",
+                                        transition: Bounce,
+                                    });
+                                    setTimeout(() => {
+                                        // router.push("/chat");
+                                    }, 2000)
+
+                                }
+                                else {
+                                    toast.error('Error in logging in', {
+                                        position: "top-right",
+                                        autoClose: 2000,
+                                        hideProgressBar: false,
+                                        closeOnClick: true,
+                                        pauseOnHover: true,
+                                        draggable: true,
+                                        progress: undefined,
+                                        theme: "dark",
+                                        transition: Bounce,
+                                    });
+                                }
+                            })
                         }}
                     ><img src="/google.svg" className="h-10" /></button>
                     <button className=" rounded-full border-2 p-1 hover:bg-[#22222270]"
@@ -46,10 +80,10 @@ export default function Signup() {
                     }}
                 >Signup</button>
 
-                <p onClick={()=>{
+                <p onClick={() => {
                     router.push("/auth/register")
                 }}
-                 className="text-left mt-10 text-sm text-blue-600 font-semibold hover:underline cursor-pointer">Don't have an Account? Register</p>
+                    className="text-left mt-10 text-sm text-blue-600 font-semibold hover:underline cursor-pointer">Don't have an Account? Register</p>
             </div>
 
         </main>

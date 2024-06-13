@@ -1,5 +1,7 @@
 "use client"
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 import { createUser, signInWithFacebook, signInWithGoogle } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
@@ -37,10 +39,13 @@ export default function Signup() {
                 <p>Or signup with</p>
                 <div className="flex justify-center space-x-10 mt-2 mb-6">
                     <button className="p-1 rounded-full border-2 hover:bg-[#22222270]"
-                        onClick={(e) => {
+                        onClick={async (e) => {
                             e.preventDefault();
-                            signInWithGoogle()
-                            router.push("/chat");
+                            const user = await signInWithGoogle()
+                            if(user){
+                              router.push("/chat");
+                              
+                            }
                         }}
                     ><img src="/google.svg" className="h-10" /></button>
                     <button className=" rounded-full border-2 p-1 hover:bg-[#22222270]"
