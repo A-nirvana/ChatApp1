@@ -10,6 +10,7 @@ export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [userName, setUserName] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
     router.prefetch("/auth/login")
     return (
@@ -44,7 +45,6 @@ export default function Signup() {
                             const user = await signInWithGoogle()
                             if(user){
                               router.push("/chat");
-                              
                             }
                         }}
                     ><img src="/google.svg" className="h-10" /></button>
@@ -58,11 +58,15 @@ export default function Signup() {
                 </div>
 
                 <button className=" bg-[#1da1f2] p-3 rounded-xl w-2/3 self-center font-semibold"
-                    onClick={(e) => {
+                    onClick={async (e) => {
                         e.preventDefault();
-                        createUser(email, password, userName);
+                        setIsLoading(true);
+                        const user = await createUser(email, password, userName);
+                        if(user){
+                            router.push("/chat");
+                        }
                     }}
-                >Signup</button>
+                >{isLoading?"Loading":"Signup"}</button>
 
                 <p onClick={()=>{
                     router.push("/auth/login")

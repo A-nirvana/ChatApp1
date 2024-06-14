@@ -10,10 +10,10 @@ import {
   updateProfile
 } from "firebase/auth";
 
-import { db } from "./clientApp";
-
+import { db, storage } from "./clientApp";
 import { auth } from "./clientApp";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getDownloadURL, ref } from "firebase/storage";
 
 export function onAuthStateChanged(cb: NextOrObserver<User>): () => void {
   return _onAuthStateChanged(auth, cb);
@@ -23,12 +23,15 @@ export async function createUser(email : string, password : string, userName : s
   try{
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       if (auth.currentUser) {
+        const url = await getDownloadURL(ref(storage,"gs://hunterchat-48b60.appspot.com/logo.svg"))
         updateProfile(auth.currentUser, {
-            displayName : userName
+            displayName : userName,
+            photoURL : url
         });
         await setDoc(doc(db, "users", userCred.user.uid), {
           username : userName,
           email,
+          avatar : url,
           id: userCred.user.uid,
           blocked: []
         });
@@ -74,6 +77,7 @@ export async function signInWithGoogle() {
         username : user.displayName,
         email : user.email,
         id: user.uid,
+        avatar : user.photoURL,
         blocked: []
       });
 
@@ -102,6 +106,7 @@ export async function signInWithFacebook() {
         username : user.displayName,
         email : user.email,
         id: user.uid,
+        avatar : user.photoURL,
         blocked: []
       });
 

@@ -1,8 +1,13 @@
-interface Chat {
-    name: string;
-    about: string;
-    chats: { sender: string; message: string }[];
-    imgLink : string
-  }
+interface media {
+  file: File | null;
+  url: string
+}
 
-export type {Chat}
+interface Chat {
+  name: string;
+  about: string;
+  chats: { sender: string; message: string; media:media|null }[];
+  imgLink: string
+}
+
+export type { Chat }
