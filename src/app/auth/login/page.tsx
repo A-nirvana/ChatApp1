@@ -7,8 +7,6 @@ import { signInWithFacebook, signInWithGoogle, signUser } from "@/lib/firebase/a
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/UserProvider";
 
-
-
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
