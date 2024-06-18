@@ -23,7 +23,7 @@ export function useUser() {
   return user;
 }
 
-export async function currentUser(){
+export function currentUser(){
   return auth.currentUser;
 }
 
