@@ -1,11 +1,67 @@
 "use client"
 
-import { Chat } from '../@contacts';
+import { FireChat, media } from '../@components';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { motion } from 'framer-motion';
 import { User } from 'firebase/auth';
+import { arrayUnion, doc, getDoc, updateDoc } from 'firebase/firestore';
+import upload from '@/lib/firebase/storage';
+import { db } from '@/lib/firebase/clientApp';
 
-export default function Input(chat: string, setChat: Function, current: Chat, setCurrent: Function, file: {file:File | null,url : string}, setFile: Function) {
+export default function Input(chat: string, setChat: Function, file: media, setFile: Function, user: User | null| undefined, chatId: string, reciever:any) {
+
+  const handlesend = async () =>{
+    let imgUrl = null;
+  
+      try {
+        if (file.file) {
+          imgUrl = await upload(file.file);
+        }
+  
+        await updateDoc(doc(db, "chats", chatId), {
+          messages: arrayUnion({
+            senderId: user?.uid,
+            chat,
+            createdAt: new Date(),
+            ...(imgUrl ? { img: imgUrl } : {}),
+          }),
+        });
+  
+        const userIDs = [user?.uid, reciever.id];
+  
+        userIDs.forEach(async (id) => {
+          const userChatsRef = doc(db, "userchats", id);
+          const userChatsSnapshot = await getDoc(userChatsRef);
+  
+          if (userChatsSnapshot.exists()) {
+            const userChatsData = userChatsSnapshot.data();
+  
+            const chatIndex = userChatsData.chats.findIndex(
+              (c : FireChat) => c.chatId === chatId
+            );
+  
+            userChatsData.chats[chatIndex].lastMessage = chat;
+            userChatsData.chats[chatIndex].isSeen =
+              id === user?.uid ? true : false;
+            userChatsData.chats[chatIndex].updatedAt = Date.now();
+  
+            await updateDoc(userChatsRef, {
+              chats: userChatsData.chats,
+            });
+          }
+        });
+      } catch (err) {
+        console.log(err);
+      } finally{
+      setFile({
+        file: null,
+        url: "",
+      });
+  
+      setChat("");
+      }
+  }
+
   return (
     <>
       <input type='file' id='upload-file' hidden onChange={(e) => {
@@ -29,13 +85,9 @@ export default function Input(chat: string, setChat: Function, current: Chat, se
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
-        onClick={() => {
+        onClick={async () => {
           if (chat || file.file) {
-            const para = current.chats[current.chats.length - 1].message.split("\n");
-            current.chats[current.chats.length - 1].sender === "You" && para.length < 6 && !file.file ? current.chats[current.chats.length - 1].message += "\n" + chat : current.chats.push({ sender: "You", message: chat, media: file });
-            setChat("");
-            setFile({file:null,url:""})
-            setCurrent({ name: current.name, about: current.about, chats: current.chats, imgLink: "" })
+            await handlesend(); 
           }
         }}
       ><img src="/send.svg" className='h-6 mr-0.5' /></motion.div>

@@ -23,7 +23,7 @@ export async function createUser(email : string, password : string, userName : s
   try{
       const userCred = await createUserWithEmailAndPassword(auth, email, password);
       if (auth.currentUser) {
-        const url = await getDownloadURL(ref(storage,"gs://hunterchat-48b60.appspot.com/logo.svg"))
+        const url = await getDownloadURL(ref(storage,`gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}/logo.svg`))
         updateProfile(auth.currentUser, {
             displayName : userName,
             photoURL : url

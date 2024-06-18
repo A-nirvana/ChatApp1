@@ -2,7 +2,7 @@
 
 import { Shantell_Sans } from "next/font/google";
 import { use, useEffect, useState } from "react";
-import Footer from "./@contacts/Footer";
+import Footer from "./@components/Footer";
 import Signup  from "./auth/register/page";
 import { useRouter } from "next/navigation";
 import { currentUser } from "@/lib/getUser";
