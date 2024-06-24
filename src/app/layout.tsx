@@ -1,8 +1,9 @@
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { getAuthenticatedAppForUser } from "@/lib/firebase/serverApp";
 import { UserProvider } from "./UserProvider";
+import StoreProvider from "./StoreProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,11 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <UserProvider>
+      <StoreProvider>
+        <UserProvider>
         <body className={inter.className}>
-        {children}</body>
+          {children}</body>
       </UserProvider>
-      
+      </StoreProvider>
     </html>
   );
 }

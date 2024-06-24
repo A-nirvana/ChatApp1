@@ -68,7 +68,7 @@ export default function Input(chat: string, setChat: Function, file: media, setF
         if(e.target.files)
         setFile({file :e.target.files[0], url : URL.createObjectURL(e.target.files[0])})
       }}></input>
-      <label htmlFor="upload-file"><img src='/add.svg' className='h-12 mt-1 cursor-pointer' /></label>
+      <label htmlFor="upload-file"><img src='/add.svg' className='h-12 mt-1 cursor-pointer invert' /></label>
       <div className='flex justify-between w-2/3 border-x-2 mx-4 border-gray-800'>
         <ReactTextareaAutosize maxRows={6} className='w-11/12 bg-transparent bg-opacity-70 py-4 px-6 '
         value={chat}
@@ -90,7 +90,7 @@ export default function Input(chat: string, setChat: Function, file: media, setF
             await handlesend(); 
           }
         }}
-      ><img src="/send.svg" className='h-6 mr-0.5' /></motion.div>
+      ><img src="/send.svg" className='h-6 mr-0.5 invert' /></motion.div>
       <motion.div
         className='box p-2 mt-2 rounded-full mx-2 cursor-pointer h-10'
         whileHover={{ scale: 1.2 }}
@@ -118,7 +118,7 @@ export default function Input(chat: string, setChat: Function, file: media, setF
             });
         }}
       >
-        <img src="/record.svg" className='h-6' />
+        <img src="/record.svg" className='h-6 invert' />
       </motion.div>
 
     </>

@@ -1,11 +1,8 @@
 "use client"
 
 import { Shantell_Sans } from "next/font/google";
-import { use, useEffect, useState } from "react";
 import Footer from "./@components/Footer";
-import Signup  from "./auth/register/page";
 import { useRouter } from "next/navigation";
-import { currentUser } from "@/lib/getUser";
 
 const inter = Shantell_Sans({
   weight: "700",
@@ -15,9 +12,6 @@ const inter = Shantell_Sans({
 
 export default function Home() {
   const router = useRouter();
-  // useEffect(()=>{
-
-  // },[])
   return (
     <main className="relative flex flex-col min-h-screen pt-6">
 

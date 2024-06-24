@@ -2,18 +2,26 @@
 
 import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { signInWithFacebook, signInWithGoogle, signUser } from "@/lib/firebase/auth";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/app/UserProvider";
+import { useAppStore } from '@/lib/redux/hooks';
+import { setUser } from '@/lib/redux/user';
 
 export default function Signup() {
+    const store = useAppStore();
+    const initialized = useRef(false)
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
     const user = useUser();
-    if (user) {
+    if (initialized.current) {
         router.push("/chat")
+    }
+    if(user){
+        store.dispatch(setUser(user))
+        initialized.current = true;
     }
     return (
         <main className="h-screen w-screen flex justify-center items-center">

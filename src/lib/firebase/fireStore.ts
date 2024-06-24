@@ -1,8 +1,5 @@
 import {
 	collection,
-	onSnapshot,
-	query,
-	getDocs,
 	doc,
 	getDoc,
 	setDoc,
@@ -18,13 +15,8 @@ import {
 
 import { db } from "./clientApp";
 import { User } from "firebase/auth";
-
-export const bring = (set : Function, user: User|null|undefined) => {
-	if(user) onSnapshot(doc(db, "userChats", user?.uid ), (res) => {
-		set(res.data()?.Chats)
-		console.log("Current data: ", res.data());
-	});
-}
+import upload from "./storage";
+import { FireChat, media } from "@/app/@components";
 
 export const addChat = async (user: User | null | undefined, recieverId: string) => {
 	const userChatsRef = collection(db, "userChats");
@@ -48,15 +40,44 @@ export const addChat = async (user: User | null | undefined, recieverId: string)
 	}
 }
 
-export const sendMessage = async (chatId: string, message: string, user: User | null | undefined) => {
-	const chatRef = doc(db, "chats", chatId);
+export const sendMessage = async (chatId: string, chat: string, user: User | null | undefined, reciever: any, file: media) => {
+	let imgUrl = null;
 	try {
-		await updateDoc(chatRef, {
+		if (file.file) {
+			imgUrl = await upload(file.file);
+		}
+
+		await updateDoc(doc(db, "chats", chatId), {
 			messages: arrayUnion({
-				message: message,
-				sender: user?.displayName,
-				createdAt: Timestamp.now(),
+				senderId: user?.uid,
+				chat,
+				createdAt: new Date(),
+				...(imgUrl ? { img: imgUrl } : {}),
 			}),
+		});
+
+		const userIDs = [user?.uid, reciever.id];
+
+		userIDs.forEach(async (id) => {
+			const userChatsRef = doc(db, "userchats", id);
+			const userChatsSnapshot = await getDoc(userChatsRef);
+
+			if (userChatsSnapshot.exists()) {
+				const userChatsData = userChatsSnapshot.data();
+
+				const chatIndex = userChatsData.chats.findIndex(
+					(c: FireChat) => c.chatId === chatId
+				);
+
+				userChatsData.chats[chatIndex].lastMessage = chat;
+				userChatsData.chats[chatIndex].isSeen =
+					id === user?.uid ? true : false;
+				userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+				await updateDoc(userChatsRef, {
+					chats: userChatsData.chats,
+				});
+			}
 		});
 	} catch (err) {
 		console.log(err);
@@ -82,3 +103,10 @@ export const getUser = async (userId: string) => {
 	return userSnap.data();
 }
 
+export const setCallDoc = async (offer: { sdp: string | undefined, type: RTCSdpType }) => {
+	const callDocRef = doc(collection(db, 'calls'));
+	const offerCandidates = collection(callDocRef, 'offerCandidates')
+	const answerCandidates = collection(callDocRef, 'answerCandidates')
+
+	await setDoc(callDocRef, offer)
+}
