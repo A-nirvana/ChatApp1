@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef, useState } from 'react'
-import Contacts from '../@components/page'
+import Contacts from '../@components/Contacts'
 import "./chat.css"
 import { motion } from 'framer-motion';
 import { FireMessage } from '../@components';
@@ -25,10 +25,6 @@ function App() {
   const [chatId, setChatId] = useState<string>("");
   const [currentChats, setCurrentChats] = useState<DocumentData | undefined>()
   const [chat, setChat] = useState("")
-  const [img, setImg] = useState({
-    file: null,
-    url: ""
-  })
   const endRef = useRef<HTMLDivElement>(null)
   const [user, setUser] = useState<User | null>()
   const [view, setView] = useState(false)
@@ -51,7 +47,7 @@ function App() {
     if (endRef.current) {
       endRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [img, chat])
+  }, [currentChats])
 
   useEffect(() => {
     setUser(currUser);
@@ -118,7 +114,7 @@ function App() {
             }
             <div ref={endRef}></div>
             <div className=' absolute bottom-0 justify-center flex w-3/4 bg-slate-900'>
-              {Input(chat, setChat, img, setImg, currUser, chatId, reciever)}
+              <Input chat={chat} setChat={setChat} reciever={reciever} user={user} chatId={chatId}/>
             </div>
 
           </div>
