@@ -31,7 +31,7 @@ export default function vc() {
   };
 
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null)
-  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
+  const [remoteStream, setRemoteStream] = useState<MediaStream | null>(new MediaStream())
   useEffect(() => {
     window.navigator.mediaDevices
       .getUserMedia({
@@ -59,12 +59,12 @@ export default function vc() {
   return (
     <>
       <div className=" px-80 h-screen justify-center items-center">
-        <div className="flex justify-center mt-20">
+        <div className="flex space-x-12 justify-center">
           <Video stream={videoStream} />
           <Video stream={remoteStream} />
         </div>
 
-        <div className="flex w-1/2 mx-16 justify-center mt-4 space-x-20 absolute bottom-4">
+        <div className="flex w-full justify-center mt-4 space-x-20">
           <motion.div
             className='box p-2 bg-slate-600 rounded-full mx-2 cursor-pointer h-12 w-12 mt-2'
             whileHover={{ scale: 1.2 }}

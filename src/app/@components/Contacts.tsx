@@ -4,17 +4,16 @@ import { FireChat } from ".";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User } from "firebase/auth";
-import { bring, getChats, getUser } from "@/lib/firebase/fireStore";
+import { getChats, getUser } from "@/lib/firebase/fireStore";
 import { DocumentData } from "firebase/firestore";
 
 interface ContactsProps {
-    set: Function;
     user: User | null | undefined;
     setContact: Function;
     setChatId: Function;
 }
 
-const Contacts: React.FC<ContactsProps> = ({ set, user, setContact, setChatId }) => {
+const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
     const [chatList, setChatList] = useState<FireChat[]>([])
     const [current, setCurrent] = useState<FireChat>();
     useEffect(() => {
@@ -23,9 +22,9 @@ const Contacts: React.FC<ContactsProps> = ({ set, user, setContact, setChatId })
         })
     }, [])
     return (
-        <main className="flex h-auto flex-col items-center justify-between space-y-3 ">
+        <main className="h-auto items-center justify-between space-y-3 ">
             {chatList.map((item) => (
-                <ChatItem item={item} set={set} setChatId={setChatId} setCurrent={setCurrent} current={current} setContact={setContact}/>
+                <ChatItem item={item} setChatId={setChatId} setCurrent={setCurrent} current={current} setContact={setContact}/>
             )
             )}
         </main>
@@ -38,13 +37,12 @@ export default Contacts
 interface ChatItemProps {
     item: FireChat;
     current: FireChat | undefined;
-    set: Function;
     setCurrent: Function;
     setChatId: Function;
     setContact: Function
   }
   
-const ChatItem: React.FC<ChatItemProps> = ({ item,current,setCurrent,set,setChatId, setContact }) => {
+const ChatItem: React.FC<ChatItemProps> = ({ item,current,setCurrent,setChatId, setContact }) => {
     const [reciever, setReciever] = useState<DocumentData | undefined>(undefined);
   
     useEffect(() => {
@@ -67,14 +65,13 @@ const ChatItem: React.FC<ChatItemProps> = ({ item,current,setCurrent,set,setChat
                 }`}
             onClick={() => {
                 setCurrent(item);
-                set(item);
                 setChatId(item.chatId);
                 setContact(reciever)
                 console.log(item)
             }}
         >
             <img src={avatar} className="rounded-full mr-4" />
-            <div>
+            <div className="hidden md:block">
                 <p className="text-md text-black dark:text-white font-semibold">{name}</p>
                 <p className="text-xs text-gray-600">{item.lastMessage}</p>
             </div>
