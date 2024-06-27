@@ -29,9 +29,14 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
     file: null,
     url: ""
   })
+  const [file, setFile] = useState<media>({
+    file:null,
+    url:""
+  })
   const handlesend = async () => {
     let imgUrl = null;
     let vidUrl = null;
+    let fileUrl = null;
 
     try {
       if (img.file) {
@@ -40,6 +45,9 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
       if (vid.file) {
         vidUrl = await upload(vid.file)
       }
+      if(file.file){
+        fileUrl = await upload(file.file)
+      }
 
       await updateDoc(doc(db, "chats", chatId), {
         messages: arrayUnion({
@@ -47,7 +55,8 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
           chat,
           createdAt: new Date(),
           ...(imgUrl ? { img: imgUrl } : {}),
-          ...(vidUrl ? { vid: vidUrl } : {})
+          ...(vidUrl ? { vid: vidUrl } : {}),
+          ...(fileUrl? { file: fileUrl} : {})
         }),
       });
 
@@ -98,7 +107,11 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
         <img src='/add.svg' className='h-12 mt-1 cursor-pointer invert' />
       </button>
       {disp && <div className='absolute bottom-16 bg-lime-700 rounded-md pr-5 pl-2 py-1 left-[5%]'>
-        <input type='file' id='upload-file' accept='image/*' hidden onChange={(e) => {
+        <input type='file' id='upload-file' hidden onChange={(e) => {
+          if (e.target.files)
+            setFile({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })
+        }}></input>
+        <input type='file' id='upload-img' accept='image/*' hidden onChange={(e) => {
           if (e.target.files)
             setImg({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })
         }}></input>
@@ -106,8 +119,9 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
           if (e.target.files)
             setVid({ file: e.target.files[0], url: URL.createObjectURL(e.target.files[0]) })
         }}></input>
+        <label htmlFor="upload-file" className='flex items-center justify-center cursor-pointer'>File</label>
         <label htmlFor="up" className='flex items-center cursor-pointer'><img src='/vidPlay.svg' className='h-12 mt-1 invert' />Video</label>
-        <label htmlFor="upload-file" className='flex items-center cursor-pointer'><img src='/photo.svg' className='h-12 mt-1 invert' />Photo</label>
+        <label htmlFor="upload-img" className='flex items-center cursor-pointer'><img src='/photo.svg' className='h-12 mt-1 invert' />Photo</label>
       </div>
       }
 
@@ -122,7 +136,6 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
         {img.file && <img src={img.url} className='h-20 bottom-0 fixed right-60' />}
         {vid.file && <video className='h-20 bottom-0 fixed right-60' preload='metadata'><source src={vid.url + `#t=0.1`}></source></video>}
       </div>
-
       <motion.div
         className='box p-2 mt-2 rounded-full ml-4 mr-2 cursor-pointer h-10 '
         whileHover={{ scale: 1.2 }}
@@ -147,28 +160,6 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
         <img src="/record.svg" className='h-6 invert' />
       </motion.div>
 
-    </>
-  )
-}
-
-export function profile(user: User, setView: Function) {
-  return (
-    <>
-      <div className='flex bg-[#ff983295] p-8 rounded-2xl ml-5'>
-        <button className='absolute rounded-full bg-red-600 start-8 top-4 h-6 w-6' onClick={() => {
-          setView(false);
-        }}>{"<"}</button>
-        <div className='flex flex-col justify-center items-center mr-8'>
-          <img src={user.photoURL || undefined} className=' h-20 rounded-full border-2' />
-          <p className=' font-semibold text-xl'>{user.displayName}</p>
-        </div>
-        <div className='flex flex-col'>
-          <p className='text-lg font-semibold'>{user.email}</p>
-          <p>Verified {user.emailVerified ? "Yes" : "No"}</p>
-          <p className=''>Online</p>
-          <button className='border-2 rounded py-1 px-2 mt-8 self-end bg-[#3b4bc8c4]'>Edit Profile</button>
-        </div>
-      </div>
     </>
   )
 }

@@ -11,6 +11,7 @@ import {
 	addDoc,
 	getFirestore,
 	arrayUnion,
+	onSnapshot,
 } from "firebase/firestore";
 
 import { db } from "./clientApp";
@@ -40,49 +41,71 @@ export const addChat = async (user: User | null | undefined, recieverId: string)
 	}
 }
 
-export const sendMessage = async (chatId: string, chat: string, user: User | null | undefined, reciever: any, file: media) => {
-	let imgUrl = null;
-	try {
-		if (file.file) {
-			imgUrl = await upload(file.file);
-		}
+// export const sendMessage = async () => {
+// 	let imgUrl = null;
+//     let vidUrl = null;
+//     let fileUrl = null;
 
-		await updateDoc(doc(db, "chats", chatId), {
-			messages: arrayUnion({
-				senderId: user?.uid,
-				chat,
-				createdAt: new Date(),
-				...(imgUrl ? { img: imgUrl } : {}),
-			}),
-		});
+//     try {
+//       if (img.file) {
+//         imgUrl = await upload(img.file);
+//       }
+//       if (vid.file) {
+//         vidUrl = await upload(vid.file)
+//       }
+//       if(file.file){
+//         fileUrl = await upload(file.file)
+//       }
 
-		const userIDs = [user?.uid, reciever.id];
+//       await updateDoc(doc(db, "chats", chatId), {
+//         messages: arrayUnion({
+//           senderId: user?.uid,
+//           chat,
+//           createdAt: new Date(),
+//           ...(imgUrl ? { img: imgUrl } : {}),
+//           ...(vidUrl ? { vid: vidUrl } : {}),
+//           ...(fileUrl? { file: fileUrl} : {})
+//         }),
+//       });
 
-		userIDs.forEach(async (id) => {
-			const userChatsRef = doc(db, "userchats", id);
-			const userChatsSnapshot = await getDoc(userChatsRef);
+//       const userIDs = [user?.uid, reciever.id];
 
-			if (userChatsSnapshot.exists()) {
-				const userChatsData = userChatsSnapshot.data();
+//       userIDs.forEach(async (id) => {
+//         const userChatsRef = doc(db, "userchats", id);
+//         const userChatsSnapshot = await getDoc(userChatsRef);
 
-				const chatIndex = userChatsData.chats.findIndex(
-					(c: FireChat) => c.chatId === chatId
-				);
+//         if (userChatsSnapshot.exists()) {
+//           const userChatsData = userChatsSnapshot.data();
 
-				userChatsData.chats[chatIndex].lastMessage = chat;
-				userChatsData.chats[chatIndex].isSeen =
-					id === user?.uid ? true : false;
-				userChatsData.chats[chatIndex].updatedAt = Date.now();
+//           const chatIndex = userChatsData.chats.findIndex(
+//             (c: FireChat) => c.chatId === chatId
+//           );
 
-				await updateDoc(userChatsRef, {
-					chats: userChatsData.chats,
-				});
-			}
-		});
-	} catch (err) {
-		console.log(err);
-	}
-}
+//           userChatsData.chats[chatIndex].lastMessage = chat;
+//           userChatsData.chats[chatIndex].isSeen =
+//             id === user?.uid ? true : false;
+//           userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+//           await updateDoc(userChatsRef, {
+//             chats: userChatsData.chats,
+//           });
+//         }
+//       });
+//     } catch (err) {
+//       console.log(err);
+//     } finally {
+//       setImg({
+//         file: null,
+//         url: "",
+//       });
+//       setVid({
+//         file: null,
+//         url: "",
+//       });
+
+//       setChat("");
+//     }
+// }
 
 export const getChat = async (chatId: string) => {
 	const chatRef = doc(db, "chats", chatId);

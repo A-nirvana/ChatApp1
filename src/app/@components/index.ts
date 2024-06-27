@@ -17,6 +17,8 @@ interface FireMessage {
   chat: string,
   createdAt: Timestamp,
   img?: string,
+  vid?: string,
+  file?: string
 }
 
 export type { FireChat, FireMessage, media }

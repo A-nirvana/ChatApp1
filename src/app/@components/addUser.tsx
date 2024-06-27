@@ -66,21 +66,22 @@ const AddUser = () => {
         }),
       });
 
-      await updateDoc(doc(userChatsRef, currentUser?.uid), {
+      if(user?.id != currentUser?.uid){await updateDoc(doc(userChatsRef, currentUser?.uid), {
         chats: arrayUnion({
           chatId: newChatRef.id,
           lastMessage: "",
           recieverId: user?.id,
           updatedAt: Date.now(),
         }),
-      });
+      });}
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className="absolute left-[15%] top-12 bg-teal-900 p-5 h-1/3 rounded-xl z-10 border-4 border-amber-600 font-thin">
+    <div className="absolute left-0 top-12 p-5 h-1/3 rounded-xl z-10 border-4 border-amber-600 font-thin">
+      <p>Please update after adding user, I'm working to solve the issue</p>
       <form onSubmit={handleSearch}>
         <input type="text" placeholder="Username" name="username" className="p-2 px-5 rounded-xl outline-none bg-[#1d1d1d] mr-2" />
         <button>Search</button>

@@ -5,7 +5,9 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User } from "firebase/auth";
 import { getChats, getUser } from "@/lib/firebase/fireStore";
-import { DocumentData } from "firebase/firestore";
+import { DocumentData, doc, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase/clientApp";
+import { error } from "console";
 
 interface ContactsProps {
     user: User | null | undefined;
@@ -17,10 +19,33 @@ const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
     const [chatList, setChatList] = useState<FireChat[]>([])
     const [current, setCurrent] = useState<FireChat>();
     useEffect(() => {
+        if (user) {
+          const unSub = onSnapshot(doc(db, "userChats", user.uid), (res) => {
+            const List = res.data()?.chats;
+            console.log(List)
+            if(List) setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
+          }
+        ,(error)=>{
+            console.log(error)
+        }
+        );
+          return () => {
+            unSub();
+          };
+        }
+      }, [user]);
+      useEffect(() => {
         if (user) getChats(user).then((List) => {
             setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
         })
     }, [])
+    if(!chatList){
+        return(
+            <div>
+                <p>Loading</p>
+            </div>
+        )
+    }
     return (
         <main className="h-auto items-center justify-between space-y-3 ">
             {chatList.map((item) => (

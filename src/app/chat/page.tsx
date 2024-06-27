@@ -5,7 +5,8 @@ import "./chat.css"
 import { motion } from 'framer-motion';
 import { FireMessage } from '../@components';
 import { Source_Code_Pro } from 'next/font/google';
-import Input, { profile } from './Input';
+import Input from './Input';
+import { profile } from '../settings/profile';
 import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useUser } from '../UserProvider';
@@ -75,8 +76,8 @@ function App() {
         <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4' />
         <div className='mt-2'>{user && <Contacts user={user} setContact={setReciever} setChatId={setChatId} />}</div>
         <div className='absolute bottom-16'>{view && profile(user, setView)}</div>
-        <div className=' absolute bottom-0 py-2 w-1/4 items-center flex'>
-          <div className=' hover:opacity-70 cursor-pointer hover:bg-gray-600 px-5 rounded py-1 flex' onClick={() => {
+        <div className=' absolute bottom-0 py-2 w-1/4 items-center flex flex-col md:flex-row justify-center'>
+          <div className=' hover:opacity-70 cursor-pointer hover:bg-gray-600 mx-3 md:px-4 rounded py-1 flex' onClick={() => {
             setView(!view)
           }}>
             <img src={user?.photoURL || undefined} className={`rounded-full bg-yellow-100 ${user.photoURL ? 'h-9' : 'h-7 p-0.5'}`} />
@@ -87,7 +88,7 @@ function App() {
           </div>
           <button onClick={() => {
             router.push("/settings")
-          }} className=' hover:bg-slate-800 p-1 rounded-lg'><img src='/settings.svg' className='h-6 invert hover:rotate-[360deg] hover:transition-all hover:duration-300' /></button>
+          }} className=' hover:bg-slate-800 p-1 rounded-lg mx-3 md:ml-40'><img src='/settings.svg' className='h-6 invert hover:rotate-[360deg] hover:transition-all hover:duration-300' /></button>
         </div>
       </section>
       <section className='w-4/5 md:w-3/4 text-slate-950 dark:text-white max-h-screen'>
@@ -103,7 +104,7 @@ function App() {
           <img src="/video.svg" className='h-8' />
         </motion.div>}
         <div className='bg-white dark:bg-blue-950  h-14 shadow-md shadow-slate-950 text-center'>
-          <p className={`font-semibold text-xl pt-1 ${inter.className}`}>{reciever?.username}</p>
+          <p className={`font-semibold text-xl pt-2 ${inter.className}`}>{reciever?.username}</p>
         </div>
         <hr className=' bg-cyan-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0.1rem_0.5rem_#00ffff80] border-cyan-700 w-11/12 ml-12' />
         {reciever &&
