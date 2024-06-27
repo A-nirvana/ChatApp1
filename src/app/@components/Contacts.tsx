@@ -7,7 +7,7 @@ import { User } from "firebase/auth";
 import { getChats, getUser } from "@/lib/firebase/fireStore";
 import { DocumentData, doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
-import { error } from "console";
+import Loader from "../loading";
 
 interface ContactsProps {
     user: User | null | undefined;
@@ -22,7 +22,6 @@ const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
         if (user) {
           const unSub = onSnapshot(doc(db, "userChats", user.uid), (res) => {
             const List = res.data()?.chats;
-            console.log(List)
             if(List) setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
           }
         ,(error)=>{
@@ -36,20 +35,20 @@ const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
       }, [user]);
       useEffect(() => {
         if (user) getChats(user).then((List) => {
-            setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
+            if(List) setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
         })
     }, [])
     if(!chatList){
         return(
-            <div>
-                <p>Loading</p>
-            </div>
+            <main>
+              <Loader/>
+            </main>
         )
     }
     return (
         <main className="h-auto items-center justify-between space-y-3 ">
-            {chatList.map((item) => (
-                <ChatItem item={item} setChatId={setChatId} setCurrent={setCurrent} current={current} setContact={setContact}/>
+            {chatList.map((item,key) => (
+                <ChatItem item={item} setChatId={setChatId} setCurrent={setCurrent} current={current} setContact={setContact} key={key}/>
             )
             )}
         </main>
@@ -92,7 +91,6 @@ const ChatItem: React.FC<ChatItemProps> = ({ item,current,setCurrent,setChatId, 
                 setCurrent(item);
                 setChatId(item.chatId);
                 setContact(reciever)
-                console.log(item)
             }}
         >
             <img src={avatar} className="rounded-full mr-4" />

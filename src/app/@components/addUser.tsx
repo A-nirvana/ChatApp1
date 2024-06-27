@@ -77,11 +77,14 @@ const AddUser = () => {
     } catch (err) {
       console.log(err);
     }
+    finally{
+      setUser(null)
+    }
   };
 
   return (
-    <div className="absolute left-0 top-12 p-5 h-1/3 rounded-xl z-10 border-4 border-amber-600 font-thin">
-      <p>Please update after adding user, I'm working to solve the issue</p>
+    <div className=" p-5 border-2 font-thin">
+      <p className="text-xs tracking-tighter">Please refresh after adding user, I&apos;m working to solve the issue</p>
       <form onSubmit={handleSearch}>
         <input type="text" placeholder="Username" name="username" className="p-2 px-5 rounded-xl outline-none bg-[#1d1d1d] mr-2" />
         <button>Search</button>

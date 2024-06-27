@@ -40,13 +40,13 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
 
     try {
       if (img.file) {
-        imgUrl = await upload(img.file);
+        imgUrl = await upload(img.file,'images/');
       }
       if (vid.file) {
-        vidUrl = await upload(vid.file)
+        vidUrl = await upload(vid.file, 'videos/')
       }
       if(file.file){
-        fileUrl = await upload(file.file)
+        fileUrl = await upload(file.file, 'files/')
       }
 
       await updateDoc(doc(db, "chats", chatId), {
@@ -142,7 +142,7 @@ const Input: React.FC<inputProps> = ({ chat, setChat, user, chatId, reciever }) 
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 400, damping: 17 }}
         onClick={async () => {
-          if (chat || img.file || vid.file) {
+          if (chat || img.file || vid.file || file.file) {
             await handlesend();
           }
         }}

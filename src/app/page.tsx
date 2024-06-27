@@ -64,7 +64,7 @@ export default function Home() {
         <div className=" flex justify-evenly p-8 m-24 py-32 border-8 rounded-3xl bg-[#2600ff27] mt-60">
           <img src="/piece.png" width={2500} />
           <div className="font-extralight text-3xl mt-20 font-sans tracking-wider">
-            <p className={` text-5xl ${inter.className} tracking-tighter mb-4`}>Connect and Compete:  Whether you're a seasoned gamer or a newcomer to the retro scene</p>
+            <p className={` text-5xl ${inter.className} tracking-tighter mb-4`}>Connect and Compete:  Whether you&apos;re a seasoned gamer or a newcomer to the retro scene</p>
             <span className={`text-4xl ${inter.className} tracking-tighter`}>Social Lobby:</span> Mingle with fellow players in the vibrant social lobby before diving into a game.
             <p><span className={`text-4xl ${inter.className} tracking-tighter`}>Friend Finder:</span> Locate friends (old and new) based on shared interests or favorite retro titles.</p>
             <span className={`text-4xl ${inter.className} tracking-tighter`}>Voice Chat:</span> Strategize and reminisce with built-in voice chat functionality.</div>

@@ -89,7 +89,7 @@ export default function Signup() {
                 <p onClick={() => {
                     router.push("/auth/register")
                 }}
-                    className="text-left mt-10 text-sm text-blue-600 font-semibold hover:underline cursor-pointer">Don't have an Account? Register</p>
+                    className="text-left mt-10 text-sm text-blue-600 font-semibold hover:underline cursor-pointer">Don&apos;t have an Account? Register</p>
             </div>
                 <ToastContainer/>
         </main>

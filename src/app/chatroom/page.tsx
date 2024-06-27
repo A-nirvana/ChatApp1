@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Video } from "./video";
 import { motion } from "framer-motion";
 
-export default function vc() {
+const VC : React.FC =()=> {
   let pc: RTCPeerConnection;
 
   if (typeof window !== "undefined") pc = new RTCPeerConnection({
@@ -16,19 +16,19 @@ export default function vc() {
     iceCandidatePoolSize: 10,
   });
 
-  const createAndSetOffer = async () => {
-    try {
-      const offerDescription = await pc.createOffer();
-      await pc.setLocalDescription(offerDescription);
+  // const createAndSetOffer = async () => {
+  //   try {
+  //     const offerDescription = await pc.createOffer();
+  //     await pc.setLocalDescription(offerDescription);
 
-      const offer = {
-        sdp: offerDescription.sdp,
-        type: offerDescription.type
-      }
-    } catch (error) {
-      console.error("Error creating offer or setting local description:", error);
-    }
-  };
+  //     const offer = {
+  //       sdp: offerDescription.sdp,
+  //       type: offerDescription.type
+  //     }
+  //   } catch (error) {
+  //     console.error("Error creating offer or setting local description:", error);
+  //   }
+  // };
 
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null)
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null)
@@ -48,13 +48,13 @@ export default function vc() {
     }
   }, [])
 
-  useEffect(() => {
-    pc.ontrack = (event) => {
-      setRemoteStream(event.streams[0]);
-    };
+  // useEffect(() => {
+  //   pc.ontrack = (event) => {
+  //     setRemoteStream(event.streams[0]);
+  //   };
 
-    createAndSetOffer();
-  }, [remoteStream])
+  //   createAndSetOffer();
+  // }, [remoteStream])
 
   return (
     <>
@@ -114,3 +114,5 @@ export default function vc() {
 
   )
 }
+
+export default VC

@@ -14,6 +14,7 @@ import { db } from '@/lib/firebase/clientApp';
 import { onSnapshot, doc, DocumentData } from 'firebase/firestore';
 import AddUser from '../@components/addUser';
 import ChatComponent from './ChatComponent';
+import Loader from '../loading';
 
 const inter = Source_Code_Pro({
   weight: "600",
@@ -53,13 +54,13 @@ function App() {
   useEffect(() => {
     setUser(currUser);
   }, [currUser])
-  const [add, setAdd] = useState(false)
 
   if (!user) {
     return (
-      <p>
-        Loading
-      </p>
+      <main className='min-h-screen w-screen flex'>
+        <Loader/>
+      </main>
+      
     )
   }
 
@@ -68,12 +69,9 @@ function App() {
       <section className=' bg-slate-900 dark:bg-slate-900 md:w-1/4 w-1/5'>
         <div className=' h-14 pr-1 text-center text-xl font-semibold font-mono pt-3 flex justify-center'>
           <img src='/Untitledlogo.svg' className='h-10 invert -mt-1 dark:drop-shadow-[0_0_0.3rem_#ff0000]' />
-          <button className='absolute left-[22%] rounded border-2 border-white px-2' onClick={() => {
-            setAdd(!add)
-          }}>+</button>
-          {add && <AddUser />}
         </div>
         <hr className=' bg-purple-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0_0.5rem_#ff44ff80] border-purple-700 w-11/12 ml-4' />
+        <AddUser />
         <div className='mt-2'>{user && <Contacts user={user} setContact={setReciever} setChatId={setChatId} />}</div>
         <div className='absolute bottom-16'>{view && profile(user, setView)}</div>
         <div className=' absolute bottom-0 py-2 w-1/4 items-center flex flex-col md:flex-row justify-center'>
@@ -109,8 +107,8 @@ function App() {
         <hr className=' bg-cyan-600 mb-2 h-1.5 rounded-md dark:drop-shadow-[0_0.1rem_0.5rem_#00ffff80] border-cyan-700 w-11/12 ml-12' />
         {reciever &&
           <div className=' w-full overflow-scroll h-5/6 scr'>
-            {currentChats?.messages.map((chat: FireMessage) => (
-              <ChatComponent chat={chat} />
+            {currentChats?.messages.map((chat: FireMessage, key: number) => (
+              <ChatComponent chat={chat} key={key} />
             ))
             }
             <div ref={endRef}></div>
