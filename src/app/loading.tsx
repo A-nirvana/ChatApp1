@@ -1,9 +1,11 @@
 "use client"
 
-export default function Loader(){
+const Loader: React.FC = () => {
     return(
-        <main className="bg-white flex justify-center items-center h-screen w-screen">
-            <img src="/Untitledlogo.svg" height={20}/>
+        <main className=" flex justify-center items-center h-screen w-full">
+            <img src="/WMDx.gif" height={30}/>
         </main>
     )
 }
+
+export default Loader

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useUser } from "../UserProvider";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
-export default function () {
+
+const Setttings: React.FC =()=> {
     const router = useRouter();
 
     const currUser = useUser();
@@ -43,3 +44,5 @@ export default function () {
         </>
     )
 } 
+
+export default Setttings
