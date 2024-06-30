@@ -37,7 +37,7 @@ const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
         if (user) getChats(user).then((List) => {
             if(List) setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
         })
-    }, [])
+    }, [user])
     if(!chatList){
         return(
             <main>
