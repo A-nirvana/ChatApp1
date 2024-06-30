@@ -12,7 +12,6 @@ export default function Signup() {
     const [userName, setUserName] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
-    router.prefetch("/auth/login")
     return (
         <main className="h-screen w-screen flex justify-center items-center">
             <div className=" bg-[#3d3d3d] absolute flex flex-col p-8 z-10 rounded drop-shadow-[-2rem_3rem_3rem_#00000090] text-center">
