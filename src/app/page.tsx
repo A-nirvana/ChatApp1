@@ -23,10 +23,10 @@ export default function Home() {
           width={180}
         />
         <ul className="flex space-x-12 mt-2">
-          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Home</li>
-          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Features</li>
-          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Premium</li>
-          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-pointer select-none">Contact</li>
+          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-not-allowed select-none">Home</li>
+          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-not-allowed select-none">Features</li>
+          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-not-allowed select-none">Premium</li>
+          <li className="text-lg font-semibold text-slate-900 dark:text-white cursor-not-allowed select-none">Contact</li>
         </ul>
         <button className="bg-cyan-800 font-semibold select-none px-4 py-2 rounded-3xl mt-2 hover:bg-slate-600"
           onClick={() => {
@@ -48,8 +48,12 @@ export default function Home() {
       </div>
       <div className=" ml-40 text-lg">
         <br></br>
-        <button className="bg-slate-950 text-white font-semibold select-none px-4 py-2 rounded-3xl mt-2 ml-96 hover:opacity-70">Open in Browser</button>
-        <button className="bg-white text-black font-semibold select-none px-4 py-2 rounded-3xl mt-2 ml-40 hover:opacity-70">Download</button>
+        <button className="bg-slate-950 text-white font-semibold select-none px-4 py-2 rounded-3xl mt-2 ml-96 hover:opacity-70 "
+          onClick={() => {
+            router.push("/auth/login")
+          }}
+        >Open in Browser</button>
+        <button className="bg-white text-black font-semibold select-none px-4 py-2 rounded-3xl mt-2 ml-40 cursor-not-allowed hover:opacity-70">Download</button>
       </div>
       <section className=" my-36">
         <div className=" flex justify-evenly p-8 m-24 border-8 rounded-3xl bg-[#5841db53]">
