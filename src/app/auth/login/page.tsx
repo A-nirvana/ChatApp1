@@ -17,6 +17,7 @@ export default function Signup() {
     const router = useRouter();
     const user = useUser();
     if (initialized.current) {
+        router.refresh();
         router.push("/chat")
     }
     if(user){
@@ -50,7 +51,8 @@ export default function Signup() {
                                         transition: Bounce,
                                     });
                                     setTimeout(() => {
-                                        // router.push("/chat");
+                                        router.refresh();
+                                        router.push("/chat");
                                     }, 2000)
 
                                 }

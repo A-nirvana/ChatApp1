@@ -7,7 +7,7 @@ import { User } from "firebase/auth";
 import { getChats, getUser } from "@/lib/firebase/fireStore";
 import { DocumentData, doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
-import Loader from "../loading";
+import Loader from "../app/loading";
 
 interface ContactsProps {
     user: User | null | undefined;
@@ -37,7 +37,7 @@ const Contacts: React.FC<ContactsProps> = ({ user, setContact, setChatId }) => {
         if (user) getChats(user).then((List) => {
             if(List) setChatList(List.sort((a: FireChat, b: FireChat) => b.updatedAt - a.updatedAt));
         })
-    }, [])
+    }, [user])
     if(!chatList){
         return(
             <main>

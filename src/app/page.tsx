@@ -1,7 +1,7 @@
 "use client"
 
 import { Shantell_Sans } from "next/font/google";
-import Footer from "./@components/Footer";
+import Footer from "../components/Footer";
 import { useRouter } from "next/navigation";
 
 const inter = Shantell_Sans({

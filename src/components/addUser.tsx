@@ -14,7 +14,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useState } from "react";
-import { useUser } from "../UserProvider";
+import { useUser } from "../app/UserProvider";
 import { getUser } from "@/lib/firebase/fireStore";
 
 const AddUser = () => {

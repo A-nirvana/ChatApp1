@@ -17,7 +17,7 @@ import {
 import { db } from "./clientApp";
 import { User } from "firebase/auth";
 import upload from "./storage";
-import { FireChat, media } from "@/app/@components";
+import { FireChat, media } from "@/components";
 
 export const addChat = async (user: User | null | undefined, recieverId: string) => {
 	const userChatsRef = collection(db, "userChats");
