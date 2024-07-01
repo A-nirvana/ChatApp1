@@ -1,6 +1,6 @@
 "use client"
 
-import { FireChat, media } from '../@components';
+import { FireChat, media } from '../../components';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { motion } from 'framer-motion';
 import { User } from 'firebase/auth';

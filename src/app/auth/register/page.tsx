@@ -43,7 +43,8 @@ export default function Signup() {
                             e.preventDefault();
                             const user = await signInWithGoogle()
                             if(user){
-                              router.push("/chat");
+                                router.refresh();
+                                router.push("/chat");
                             }
                         }}
                     ><img src="/google.svg" className="h-10" /></button>

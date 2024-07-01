@@ -3,7 +3,7 @@
 import { getUser } from "@/lib/firebase/fireStore";
 import { DocumentData } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { FireMessage } from "../@components";
+import { FireMessage } from "../../components";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 

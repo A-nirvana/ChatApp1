@@ -1,9 +1,9 @@
 "use client"
 import { useEffect, useRef, useState } from 'react'
-import Contacts from '../@components/Contacts'
+import Contacts from '../../components/Contacts'
 import "./chat.css"
 import { motion } from 'framer-motion';
-import { FireMessage } from '../@components';
+import { FireMessage } from '../../components';
 import { Source_Code_Pro } from 'next/font/google';
 import Input from './Input';
 import { profile } from '../settings/profile';
@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '../UserProvider';
 import { db } from '@/lib/firebase/clientApp';
 import { onSnapshot, doc, DocumentData } from 'firebase/firestore';
-import AddUser from '../@components/addUser';
+import AddUser from '../../components/addUser';
 import ChatComponent from './ChatComponent';
 import Loader from '../loading';
 

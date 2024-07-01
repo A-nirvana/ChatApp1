@@ -7,7 +7,7 @@ import { User } from "firebase/auth";
 import { getChats, getUser } from "@/lib/firebase/fireStore";
 import { DocumentData, doc, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase/clientApp";
-import Loader from "../loading";
+import Loader from "../app/loading";
 
 interface ContactsProps {
     user: User | null | undefined;
